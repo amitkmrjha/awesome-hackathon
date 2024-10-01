@@ -1,18 +1,19 @@
 package com.by.aw.hackathon
 
 import com.aw.hackathon.grpc.{HackathonService, HackathonServicePowerApi, HackathonServicePowerApiHandler}
+import com.by.aw.hackathon.routes.HackathonRoutes
 import org.apache.pekko.actor.typed.ActorSystem
 import org.apache.pekko.grpc.scaladsl.{ServerReflection, ServiceHandler}
 import org.apache.pekko.http.scaladsl.Http
 import org.apache.pekko.http.scaladsl.model.{HttpRequest, HttpResponse}
-import org.apache.pekko.http.scaladsl.server.Directives.handle
+import org.apache.pekko.http.scaladsl.server.Directives.*
 import org.apache.pekko.http.scaladsl.server.Route
 
 import scala.concurrent.duration.*
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-object HackathonServer:
+object HackathonServer extends HackathonRoutes:
 
   def start(interface: String, port: Int, grpcService: HackathonServicePowerApi)(using
       system: ActorSystem[?]
@@ -26,6 +27,9 @@ object HackathonServer:
         ServerReflection.partial(List(HackathonService))
       )
     val grpcRoute: Route                             = handle(service)
+
+    val route: Route =
+      concat(httpRoutes, grpcRoute)
 
     val bound =
       Http()

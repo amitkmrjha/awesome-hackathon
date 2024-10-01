@@ -1,17 +1,6 @@
 package com.by.aw.hackathon
 
-import com.typesafe.config.ConfigFactory
-import org.apache.pekko.actor.typed.ActorSystem
-import org.apache.pekko.actor.typed.scaladsl.Behaviors
-import org.apache.pekko.http.scaladsl.Http
-import org.apache.pekko.management.cluster.bootstrap.ClusterBootstrap
-import org.apache.pekko.management.scaladsl.PekkoManagement
-import org.slf4j.LoggerFactory
-
-import scala.concurrent.{ExecutionContext, Future}
-import scala.util.control.NonFatal
-
-object HackathonMain:
+object HackathonMain /*:
   val logger = LoggerFactory.getLogger(HackathonMain.getClass)
 
   lazy val config =
@@ -53,4 +42,4 @@ object HackathonMain:
     val serviceImpl                         = new HackathonServiceImpl
     val binding: Future[Http.ServerBinding] = HackathonServer.start(grpcInterface, grpcPort, serviceImpl)
     system.log.info(s"NFTAsset gRPC server running at $grpcInterface:$grpcPort")
-    binding
+    binding*/

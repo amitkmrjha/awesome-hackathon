@@ -38,8 +38,11 @@ object Dependencies {
   val postgres = "org.postgresql" % "postgresql" % Version.postgres
 
   val sslConfig         = "com.typesafe"          %% "ssl-config-core" % "0.6.1"
-  val awsBedrock        = "software.amazon.awssdk" % "bedrock"         % Version.awsBedrock
-  val awsBedrockRuntime = "software.amazon.awssdk" % "bedrockruntime"  % Version.awsBedrock
-  val awsSts            = "software.amazon.awssdk" % "sts"             % Version.awsBedrock
+  val awsBedrock        = "software.amazon.awssdk" % "bedrock"         % Version.awsSDK
+  val awsBedrockRuntime = "software.amazon.awssdk" % "bedrockruntime"  % Version.awsSDK
+  val awsSts            = "software.amazon.awssdk" % "sts"             % Version.awsSDK
+  val awsAuth           = "software.amazon.awssdk" % "auth"            % Version.awsSDK
+
+  val orgJsonSbt = "org.json" % "json" % Version.orgJson
 
 }

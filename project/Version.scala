@@ -6,5 +6,6 @@ object Version {
   val pekko          = "1.1.0-M1"
   val pekkoHttp      = "1.1.0-M1"
   val postgres       = "42.7.3"
-  val awsBedrock     = "2.28.11"
+  val awsSDK         = "2.28.11"
+  val orgJson        = "20240303"
 }
