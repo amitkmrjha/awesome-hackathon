@@ -1,6 +1,6 @@
 package com.by.aw.hackathon.routes
 
-import com.by.aw.hackathon.model.HealthCheck
+import com.by.aw.hackathon.model.{HealthCheck, ModelRequest, ModelResponse}
 import org.apache.pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import spray.json.*
 
@@ -16,4 +16,6 @@ trait HackathonJsonFormat extends SprayJsonSupport with DefaultJsonProtocol:
 
     override def write(obj: Instant): JsValue = JsString(obj.toString)
 
-  given healthCheckFormat: RootJsonFormat[HealthCheck] = jsonFormat2(HealthCheck.apply)
+  given healthCheckFormat: RootJsonFormat[HealthCheck]     = jsonFormat2(HealthCheck.apply)
+  given modelRequestFormat: RootJsonFormat[ModelRequest]   = jsonFormat2(ModelRequest.apply)
+  given modelResponseFormat: RootJsonFormat[ModelResponse] = jsonFormat1(ModelResponse.apply)

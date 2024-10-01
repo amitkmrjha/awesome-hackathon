@@ -12,6 +12,10 @@
         <appender-ref ref="STDOUT" />
     </appender>
 
+
+    <logger name="org.apache.pekko.management.cluster.bootstrap" level="ERROR" />
+
+
     <root level="INFO">
         <appender-ref ref="ASYNC"/>
     </root>

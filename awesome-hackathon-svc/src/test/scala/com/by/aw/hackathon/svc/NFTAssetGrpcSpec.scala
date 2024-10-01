@@ -1,7 +1,8 @@
 package com.by.aw.hackathon.svc
 
 import com.aw.hackathon.grpc.{GetHealthResponse, HackathonServiceClient}
-import com.by.aw.hackathon.{HackathonServer, HackathonServiceImpl}
+import com.by.aw.hackathon.HackathonServer
+import com.by.aw.hackathon.service.HackathonServiceImpl
 import com.google.protobuf.empty.Empty
 import com.typesafe.config.ConfigFactory
 import org.apache.pekko.actor.testkit.typed.scaladsl.ActorTestKit
@@ -31,7 +32,7 @@ class NFTAssetGrpcSpec extends AsyncWordSpec with Matchers with BeforeAndAfterAl
       .withFallback(ConfigFactory.load("local1.conf"))
       .resolve()
 
-  lazy val grpcInterface = config.getString("nft-asset-svc.grpc.interface")
+  lazy val grpcInterface = config.getString("awesome-hackathon.grpc.interface")
   lazy val grpcPort      = config.getInt("nft-asset-svc.grpc.port")
   lazy val serviceImpl   = new HackathonServiceImpl()
 

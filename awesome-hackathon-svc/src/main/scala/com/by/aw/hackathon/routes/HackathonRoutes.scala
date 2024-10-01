@@ -1,15 +1,17 @@
 package com.by.aw.hackathon.routes
 
-import com.by.aw.hackathon.model.HealthCheck
+import com.by.aw.hackathon.model.{HealthCheck, ModelRequest}
+import com.by.aw.hackathon.service.HackathonHttpService
 import org.apache.pekko.http.scaladsl.model.StatusCodes
 import org.apache.pekko.http.scaladsl.server.Directives.*
 import org.apache.pekko.http.scaladsl.server.Route
 
 import java.time.Instant
+import scala.util.{Failure, Success}
 
 trait HackathonRoutes extends HackathonJsonFormat:
 
-  def httpRoutes: Route = concat(health, hackathonRoutes)
+  def httpRoutes(httpService: HackathonHttpService): Route = concat(health, hackathonRoutes(httpService))
 
   private def health: Route =
     path("health") {
@@ -19,9 +21,14 @@ trait HackathonRoutes extends HackathonJsonFormat:
       }
     }
 
-  private def hackathonRoutes: Route =
+  private def hackathonRoutes(httpService: HackathonHttpService): Route =
     pathPrefix("hackathon") {
-      get {
-        complete(StatusCodes.NotImplemented, "Hackathon api is yet not implemented")
+      post {
+        entity(as[ModelRequest]) { modelRequest =>
+          onComplete(httpService.promptInvoke(modelRequest)) {
+            case Success(modelResponse) => complete(StatusCodes.OK, modelResponse)
+            case Failure(exception)     => complete(StatusCodes.InternalServerError, exception.getMessage)
+          }
+        }
       }
     }

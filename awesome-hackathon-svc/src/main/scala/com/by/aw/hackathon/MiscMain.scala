@@ -1,22 +1,6 @@
 package com.by.aw.hackathon
 
-import com.by.aw.hackathon.util.BedrockRequestBody
-import com.typesafe.config.ConfigFactory
-import org.apache.pekko.actor.typed.ActorSystem
-import org.apache.pekko.actor.typed.scaladsl.Behaviors
-import org.json.JSONObject
-import org.slf4j.LoggerFactory
-import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider
-import software.amazon.awssdk.core.SdkBytes
-import software.amazon.awssdk.regions.Region
-import software.amazon.awssdk.services.bedrockruntime.BedrockRuntimeClient
-import software.amazon.awssdk.services.bedrockruntime.model.{InvokeModelRequest, InvokeModelResponse}
-
-import java.nio.charset.Charset
-import scala.concurrent.ExecutionContext
-import scala.util.control.NonFatal
-
-object MiscMain:
+object MiscMain /*:
   val logger = LoggerFactory.getLogger(HackathonMain.getClass)
 
   lazy val config =
@@ -52,47 +36,22 @@ object MiscMain:
 
   @main def main(): Unit =
     sys.addShutdownHook(system.terminate())
-
+    val bedrockClient = BedrockRuntimeClient
+      .builder()
+      .region(Region.US_EAST_1)
+      .credentialsProvider(ProfileCredentialsProvider.create("development"))
+      .build()
     try {
+
       init(system)
     } catch {
       case NonFatal(e) =>
         logger.error("Terminating due to initialization error", e)
+        bedrockClient.close()
         system.terminate()
     }
 
     def init(
         system: ActorSystem[?]
     ): Unit =
-      val bedrockClient = BedrockRuntimeClient
-        .builder()
-        .region(Region.US_EAST_1)
-        .credentialsProvider(ProfileCredentialsProvider.create("development"))
-        .build()
-
-      try {
-        val bedrockBody = BedrockRequestBody
-          .builder()
-          .withModelId(MODEL_ID)
-          .withPrompt(PROMPT)
-          .withInferenceParameter("max_tokens_to_sample", 2048)
-          .withInferenceParameter("temperature", 0.5)
-          .withInferenceParameter("top_k", 250)
-          .withInferenceParameter("top_p", 1)
-          .build()
-
-        val invokeModelRequest = InvokeModelRequest
-          .builder()
-          .modelId(MODEL_ID)
-          .body(SdkBytes.fromString(bedrockBody, Charset.defaultCharset()))
-          .build()
-
-        val invokeModelResponse: InvokeModelResponse = bedrockClient.invokeModel(invokeModelRequest)
-        val responseAsJson                           = new JSONObject(invokeModelResponse.body().asUtf8String())
-
-        println("🤖 Response: ")
-        println(responseAsJson.getString("completion"))
-
-      } finally {
-        bedrockClient.close()
-      }
+      gr*/
