@@ -84,5 +84,5 @@ object PromptBuilder:
       |${tags}
       |
       |
-      |The request is as follows: {user_request}
+      |The request is as follows: ${payload}
       |""".stripMargin

@@ -40,7 +40,6 @@ class DefaultBedrockModel(bedrockClient: BedrockRuntimeClient)(using system: Act
     val invokeModelResponse      = bedrockClient.invokeModel(invokeModelRequest)
     val resultJson               = new JSONObject(invokeModelResponse.body().asUtf8String())
     val textString               = resultJson.getJSONArray("content").getJSONObject(0).getString("text")
-    logger.info(s"Extracted Text: $textString")
     val sqlPattern: Regex        = """(?s)```sql\s*(.*?)\s*```""".r
     val sqlQuery: Option[String] = sqlPattern.findFirstMatchIn(textString).map(_.group(1).replaceAll("\\s+", " "))
     sqlQuery match {
