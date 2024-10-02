@@ -11,7 +11,7 @@ trait CorsHandler:
   private lazy val accessControlAllowOrigin: String = sys.env.getOrElse("ACCESS_CONTROL_ALLOW_ORIGIN", "")
 
   private lazy val corsResponseHeaders = List(
-    `Access-Control-Allow-Origin`(accessControlAllowOrigin),
+    //`Access-Control-Allow-Origin`(accessControlAllowOrigin),
     `Access-Control-Allow-Credentials`(true),
     `Access-Control-Allow-Methods`(OPTIONS, POST, GET, DELETE),
     `Allow`(OPTIONS, POST, GET, DELETE),
@@ -27,7 +27,7 @@ trait CorsHandler:
   }
 
   def corsHandler(r: Route): Route =
-    if (!accessControlAllowOrigin.nonEmpty) {
+    if (accessControlAllowOrigin.nonEmpty) {
       addAccessControlHeaders {
         preflightRequestHandler ~ r
       }
