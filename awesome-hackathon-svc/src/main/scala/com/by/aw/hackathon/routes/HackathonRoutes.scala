@@ -2,7 +2,6 @@ package com.by.aw.hackathon.routes
 
 import com.by.aw.hackathon.model.{HealthCheck, ModelRequest}
 import com.by.aw.hackathon.service.HackathonHttpService
-import org.apache.pekko.http.cors.scaladsl.CorsDirectives.cors
 import org.apache.pekko.http.scaladsl.model.StatusCodes
 import org.apache.pekko.http.scaladsl.server.Directives.*
 import org.apache.pekko.http.scaladsl.server.Route
@@ -13,7 +12,7 @@ import scala.util.{Failure, Success}
 trait HackathonRoutes extends HackathonJsonFormat with CorsHandler:
 
   def httpRoutes(httpService: HackathonHttpService): Route =
-    cors()(
+    corsHandler(
       concat(health, hackathonRoutes(httpService))
     )
 
