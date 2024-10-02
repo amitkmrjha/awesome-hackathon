@@ -10,6 +10,7 @@ val pekkoDeps = Seq(
   pekkoPersistence,
   pekkoPersistenceTestKit,
   pekkoPersistenceJdbc,
+  pekkoJDBCProjection,
   pekkoPersistenceQuery,
   pekkoDiscovery,
   pekkoDiscoveryKubernetes,
@@ -20,6 +21,14 @@ val pekkoDeps = Seq(
   pekkoHttp,
   pekkoStream,
   pekkoJackson
+)
+
+val scalaLikeJdbcDeps = Seq(
+  scalikeJDBC,
+  scalikeJDBCStream,
+  scalikeJDBCConfig,
+  scalikeJDBCTest,
+  sslConfig
 )
 
 val postgresDeps = Seq(postgres)
@@ -49,9 +58,10 @@ lazy val `awesome-hackathon-svc` = (project in file("awesome-hackathon-svc"))
   .enablePlugins(JavaServerAppPackaging, PekkoGrpcPlugin, JavaAgent)
   .settings(buildSettings *)
   .settings(
-    libraryDependencies ++= orgJsonCollection ++ sttpClientDeps ++ awsSdk ++ commonDeps ++ pekkoDeps ++ postgresDeps ++ Seq(
-      sslConfig
-    ),
+    libraryDependencies ++= orgJsonCollection ++ sttpClientDeps ++ awsSdk ++ commonDeps ++
+      pekkoDeps ++ scalaLikeJdbcDeps ++ postgresDeps ++ Seq(
+        sslConfig
+      ),
     excludeDependencies ++= excludeLibraryDependencies
   )
   .dependsOn(`awesome-hackathon-protobuf`)

@@ -46,3 +46,12 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+  #localstack:
+    #container_name: "localstack-snowflake"
+    #image: localstack/snowflake
+    #ports:
+     # - "127.0.0.1:4566:4566"
+    #environment:
+      #- LOCALSTACK_AUTH_TOKEN=${LOCALSTACK_AUTH_TOKEN:-ls-gUGiKEye-TEKo-hIWu-6407-nawIPIlIaac3}
+    #volumes:
+      #- "./volume:/var/lib/localstack"

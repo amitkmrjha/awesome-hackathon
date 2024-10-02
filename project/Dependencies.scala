@@ -23,6 +23,7 @@ object Dependencies {
   val pekkoPersistence                = ("org.apache.pekko" %% "pekko-persistence-typed"        % Version.pekko)
   val pekkoPersistenceTestKit         = "org.apache.pekko"  %% "pekko-persistence-testkit"      % Version.pekko % Test
   val pekkoPersistenceJdbc            = "org.apache.pekko"  %% "pekko-persistence-jdbc"         % Version.pekko
+  val pekkoJDBCProjection             = "org.apache.pekko"  %% "pekko-projection-jdbc"          % Version.pekko
   val pekkoPersistenceQuery           = "org.apache.pekko"  %% "pekko-persistence-query"        % Version.pekko
   val pekkoDiscovery                  = "org.apache.pekko"  %% "pekko-discovery"                % Version.pekko
   val pekkoDiscoveryKubernetes        = "org.apache.pekko"  %% "pekko-discovery-kubernetes-api" % Version.pekko
@@ -35,7 +36,15 @@ object Dependencies {
   val pekkoStream         = "org.apache.pekko" %% "pekko-stream"                  % Version.pekko
   val pekkoJackson        = "org.apache.pekko" %% "pekko-serialization-jackson"   % Version.pekko
 
+  val scalikeJDBC       = ("org.scalikejdbc" %% "scalikejdbc"         % Version.scalikeJDBC)
+  val scalikeJDBCStream = ("org.scalikejdbc" %% "scalikejdbc-streams" % Version.scalikeJDBCStream)
+  val scalikeJDBCConfig = ("org.scalikejdbc" %% "scalikejdbc-config"  % Version.scalikeJDBC)
+  val scalikeJDBCTest   =
+    ("org.scalikejdbc" %% "scalikejdbc-test" % Version.scalikeJDBC % "test")
+
   val postgres = "org.postgresql" % "postgresql" % Version.postgres
+
+  val iamPostgresJDBCDriver = "io.magj" % "iam-jdbc-driver" % Version.iamPostgresJDBC
 
   val sslConfig         = "com.typesafe"          %% "ssl-config-core" % "0.6.1"
   val awsBedrock        = "software.amazon.awssdk" % "bedrock"         % Version.awsSDK
