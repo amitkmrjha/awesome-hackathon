@@ -5,6 +5,7 @@ import software.amazon.awssdk.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Arrays;
 
 public class BedrockRequestBody {
 
@@ -66,6 +67,9 @@ public class BedrockRequestBody {
                     break;
                 case "stability.stable-diffusion-xl-v0":
                     bedrockBodyCommand = new StabilityAICommand(prompt, inferenceParameters);
+                    break;
+                case "anthropic.claude-3-5-sonnet-20240620-v1:0":
+                    bedrockBodyCommand = new AnthropicSonetCommand(prompt, inferenceParameters);
                     break;
             }
             return bedrockBodyCommand.execute();
@@ -189,6 +193,38 @@ class AnthropicCommand extends BedrockBodyCommand {
         jsonMap.put("top_k", 250);
         jsonMap.put("top_p", 0.999);
         jsonMap.put("stop_sequences", new String[] {});
+        jsonMap.put("anthropic_version", "bedrock-2023-05-31");
+
+        if (this.inferenceParameters != null && !this.inferenceParameters.isEmpty()) {
+            updateMap(jsonMap, inferenceParameters);
+        }
+        return new JSONObject(jsonMap).toString();
+    }
+
+}
+
+class AnthropicSonetCommand extends BedrockBodyCommand {
+
+    public AnthropicSonetCommand(String prompt, Map<String, Object> inferenceParameters) {
+        super(prompt, inferenceParameters);
+    }
+
+    @Override
+    public String execute() {
+
+        //final String promptTemplate = "Human: \n Human: ##PROMPT## \n nAssistant:";
+        //final String actualPrompt = promptTemplate.replace("##PROMPT##", this.prompt);
+
+        Map<String, Object> jsonMap = new HashMap<>(7);
+        Map<String, Object> messageMap = new HashMap<>(2);
+
+        messageMap.put("role", "user");
+        messageMap.put("content", prompt);
+
+
+        jsonMap.put("messages", Arrays.asList(messageMap));
+        jsonMap.put("max_tokens", 300);
+        jsonMap.put("temperature", 0.7);
         jsonMap.put("anthropic_version", "bedrock-2023-05-31");
 
         if (this.inferenceParameters != null && !this.inferenceParameters.isEmpty()) {

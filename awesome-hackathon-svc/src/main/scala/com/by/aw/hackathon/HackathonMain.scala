@@ -33,7 +33,7 @@ object HackathonMain:
     sys.addShutdownHook(system.terminate())
     val bedrockClient = BedrockRuntimeClient
       .builder()
-      .region(Region.US_EAST_1)
+      .region(Region.EU_CENTRAL_1)
       .credentialsProvider(ProfileCredentialsProvider.create("development"))
       .build()
 

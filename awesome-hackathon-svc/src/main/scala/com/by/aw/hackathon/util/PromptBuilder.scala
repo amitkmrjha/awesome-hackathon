@@ -6,7 +6,7 @@ object PromptBuilder:
   val mpo        =
     try sourceMpo.mkString
     finally sourceMpo.close()
-  val sourceTags = scala.io.Source.fromResource("src/main/resources/tags.txt")
+  val sourceTags = scala.io.Source.fromResource("tags.txt")
   val tags       =
     try sourceTags.mkString
     finally sourceTags.close()

@@ -14,6 +14,7 @@ import org.apache.pekko.http.scaladsl.model.headers.HttpOrigin
 
 import java.time.Instant
 import scala.util.{Failure, Success}
+import scala.concurrent.duration.*
 
 trait HackathonRoutes extends HackathonJsonFormat:
   import org.apache.pekko.http.cors.scaladsl.CorsDirectives._
@@ -32,7 +33,7 @@ trait HackathonRoutes extends HackathonJsonFormat:
             .withAllowedOrigins(HttpOriginMatcher.*)
             .withAllowCredentials(false)
           cors(corsSetting)(
-            concat(health, hackathonRoutes(httpService))
+            withRequestTimeout(1.minute)(concat(health, hackathonRoutes(httpService)))
           )
         }
       }
