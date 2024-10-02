@@ -6,3 +6,4 @@ import scala.concurrent.Future
 
 trait HackathonHttpService:
   def promptInvoke(request: ModelRequest): Future[ModelResponse]
+  def helloToPyBynder: Future[String]

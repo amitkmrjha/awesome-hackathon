@@ -1,6 +1,8 @@
 package com.by.aw.hackathon
 
 import com.by.aw.hackathon.aws.DefaultBedrockModel
+import com.by.aw.hackathon.client.pybynder.PyBynderRestClient
+import com.by.aw.hackathon.provider.DefaultAssetProvider
 import com.by.aw.hackathon.service.HackathonServiceImpl
 import com.typesafe.config.ConfigFactory
 import org.apache.pekko.actor.typed.ActorSystem
@@ -60,7 +62,9 @@ object HackathonMain:
     val grpcInterface                       = system.settings.config.getString("awesome-hackathon-svc.grpc.interface")
     val grpcPort                            = system.settings.config.getInt("awesome-hackathon-svc.grpc.port")
     val bedrockModel                        = new DefaultBedrockModel(bedrockClient)
-    val serviceImpl                         = new HackathonServiceImpl(bedrockModel)
+    val pyBynderRestClient                  = PyBynderRestClient.apply
+    val assetProvider                       = new DefaultAssetProvider(pyBynderRestClient)
+    val serviceImpl                         = new HackathonServiceImpl(bedrockModel, assetProvider)
     val binding: Future[Http.ServerBinding] = HackathonServer.start(grpcInterface, grpcPort, serviceImpl, serviceImpl)
     system.log.info(s"Awesome Hackathon gRPC and Http server running at $grpcInterface:$grpcPort")
     binding

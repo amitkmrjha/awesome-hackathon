@@ -2,6 +2,8 @@ package com.by.aw.hackathon.svc
 
 import com.aw.hackathon.grpc.{GetHealthResponse, HackathonServiceClient}
 import com.by.aw.hackathon.HackathonServer
+import com.by.aw.hackathon.aws.{BedrockModel, DefaultBedrockModel}
+import com.by.aw.hackathon.provider.AssetProvider
 import com.by.aw.hackathon.service.HackathonServiceImpl
 import com.google.protobuf.empty.Empty
 import com.typesafe.config.ConfigFactory
@@ -19,7 +21,7 @@ import java.util.UUID
 import scala.concurrent.Future
 import scala.concurrent.duration.*
 
-class NFTAssetGrpcSpec extends AsyncWordSpec with Matchers with BeforeAndAfterAll with ScalaFutures:
+class HackathonGrpcSpec extends AsyncWordSpec with Matchers with BeforeAndAfterAll with ScalaFutures:
 
   given patience: PatienceConfig = PatienceConfig(scaled(5.seconds), scaled(100.millis))
 
@@ -33,26 +35,30 @@ class NFTAssetGrpcSpec extends AsyncWordSpec with Matchers with BeforeAndAfterAl
       .resolve()
 
   lazy val grpcInterface = config.getString("awesome-hackathon.grpc.interface")
-  lazy val grpcPort      = config.getInt("nft-asset-svc.grpc.port")
-  lazy val serviceImpl   = new HackathonServiceImpl()
+  lazy val grpcPort      = config.getInt("awesome-hackathon-svc.grpc.port")
+
+  val bedrockModel: BedrockModel   = ???
+  val assetProvider: AssetProvider = ???
+
+  lazy val serviceImpl = new HackathonServiceImpl(bedrockModel, assetProvider)
 
   val testKit: ActorTestKit = ActorTestKit(config)
 
   given typedSystem: ActorSystem[?] = testKit.system
 
   def clientSettings: GrpcClientSettings = GrpcClientSettings
-    .fromConfig(clientName = "nft-asset-grpc-test-client")(typedSystem)
+    .fromConfig(clientName = "awesome-hackathon-grpc-test-client")(typedSystem)
 
   val assetGrpcClient: HackathonServiceClient =
     HackathonServiceClient.apply(clientSettings)
 
   override def beforeAll(): Unit =
-    val service: Future[Http.ServerBinding] = HackathonServer.start(grpcInterface, grpcPort, serviceImpl)
+    val service: Future[Http.ServerBinding] = HackathonServer.start(grpcInterface, grpcPort, serviceImpl, serviceImpl)
 
   override def afterAll(): Unit =
     testKit.shutdownTestKit()
 
-  "NFTAsset Grpc service" should {
+  "Hackathon Grpc service" should {
     "check health of gRPC server" in {
       val request: Empty                      = Empty.defaultInstance
       val response: Future[GetHealthResponse] =
@@ -60,6 +66,6 @@ class NFTAssetGrpcSpec extends AsyncWordSpec with Matchers with BeforeAndAfterAl
           .getHealth()
           .addHeader("x-correlation-id", s"${UUID.randomUUID().toString}")
           .invoke(request)
-      response.futureValue.message shouldBe "NFTAsset gRPC is healthy!"
+      response.futureValue.message shouldBe "Hackathon gRPC is healthy!"
     }
   }

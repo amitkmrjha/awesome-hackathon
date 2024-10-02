@@ -51,6 +51,6 @@ class DefaultAssetProvider(pyBynderClient: PyBynderRestClient)(using system: Act
                       Future.failed(new Exception(response.toString()))
     yield body
     result.recoverWith { case e: Exception =>
-      log.error(s"Error while calling idp: ${e.getMessage}")
+      log.error(s"Error while calling pybynder: ${e.getMessage}")
       Future.failed(e)
     }

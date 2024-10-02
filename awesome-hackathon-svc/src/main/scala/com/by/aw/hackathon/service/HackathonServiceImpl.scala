@@ -3,6 +3,7 @@ package com.by.aw.hackathon.service
 import com.aw.hackathon.grpc.*
 import com.by.aw.hackathon.aws.BedrockModel
 import com.by.aw.hackathon.model.{ModelRequest, ModelResponse}
+import com.by.aw.hackathon.provider.AssetProvider
 import com.google.protobuf.empty.Empty
 import com.google.protobuf.timestamp.Timestamp
 import org.apache.pekko.actor.typed.ActorSystem
@@ -16,7 +17,7 @@ import java.time.Instant
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 
-class HackathonServiceImpl[A: ActorSystem](bedrockModel: BedrockModel)
+class HackathonServiceImpl[A: ActorSystem](bedrockModel: BedrockModel, assetProvider: AssetProvider)
     extends HackathonServicePowerApi
     with HackathonHttpService:
 
@@ -37,3 +38,6 @@ class HackathonServiceImpl[A: ActorSystem](bedrockModel: BedrockModel)
 
   override def promptInvoke(request: ModelRequest): Future[ModelResponse] =
     Future.fromTry(Try(bedrockModel.invoke(request)))
+
+  def helloToPyBynder: Future[String] =
+    Future.successful("Hello to Pybynder!")
