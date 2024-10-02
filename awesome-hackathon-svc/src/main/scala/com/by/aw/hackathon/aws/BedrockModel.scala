@@ -7,6 +7,7 @@ import org.json.JSONObject
 import software.amazon.awssdk.core.SdkBytes
 import software.amazon.awssdk.services.bedrockruntime.BedrockRuntimeClient
 import software.amazon.awssdk.services.bedrockruntime.model.InvokeModelRequest
+import com.by.aw.hackathon.util.PromptBuilder.buildPrompt
 
 import java.nio.charset.Charset
 
@@ -19,6 +20,7 @@ class DefaultBedrockModel(bedrockClient: BedrockRuntimeClient)(using system: Act
     val bedrockBody         = BedrockRequestBody
       .builder()
       .withModelId(request.modelId)
+      // .withPrompt(buildPrompt(request.prompt))
       .withPrompt(request.prompt)
       .withInferenceParameter("max_tokens_to_sample", 2048)
       .withInferenceParameter("temperature", 0.5)

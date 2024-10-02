@@ -9,9 +9,12 @@ import org.apache.pekko.http.scaladsl.server.Route
 import java.time.Instant
 import scala.util.{Failure, Success}
 
-trait HackathonRoutes extends HackathonJsonFormat:
+trait HackathonRoutes extends HackathonJsonFormat with CorsHandler:
 
-  def httpRoutes(httpService: HackathonHttpService): Route = concat(health, hackathonRoutes(httpService))
+  def httpRoutes(httpService: HackathonHttpService): Route =
+    corsHandler(
+      concat(health, hackathonRoutes(httpService))
+    )
 
   private def health: Route =
     path("health") {
