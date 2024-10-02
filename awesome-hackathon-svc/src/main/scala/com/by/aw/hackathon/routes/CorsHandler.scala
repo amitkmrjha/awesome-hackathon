@@ -27,7 +27,7 @@ trait CorsHandler:
   }
 
   def corsHandler(r: Route): Route =
-    if (accessControlAllowOrigin.nonEmpty) {
+    if (!accessControlAllowOrigin.nonEmpty) {
       addAccessControlHeaders {
         preflightRequestHandler ~ r
       }
