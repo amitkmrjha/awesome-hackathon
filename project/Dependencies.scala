@@ -45,4 +45,8 @@ object Dependencies {
 
   val orgJsonSbt = "org.json" % "json" % Version.orgJson
 
+  val sttpClientAkkHttp = "com.softwaremill.sttp.client4" %% "pekko-http-backend" % Version.sttp
+  val sttpSprayJson     = "com.softwaremill.sttp.client4" %% "spray-json"         % Version.sttp
+  val sttpSlf4JLog      = "com.softwaremill.sttp.client4" %% "slf4j-backend"      % Version.sttp
+
 }

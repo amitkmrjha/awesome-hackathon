@@ -8,4 +8,5 @@ object Version {
   val postgres       = "42.7.3"
   val awsSDK         = "2.28.11"
   val orgJson        = "20240303"
+  val sttp           = "4.0.0-M18"
 }

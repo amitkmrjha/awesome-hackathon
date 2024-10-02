@@ -28,6 +28,8 @@ val awsSdk = Seq(awsBedrock, awsBedrockRuntime, awsSts)
 
 val orgJsonCollection = Seq(orgJsonSbt)
 
+val sttpClientDeps = Seq(sttpClientAkkHttp, sttpSprayJson, sttpSlf4JLog)
+
 val excludeLibraryDependencies = Seq(
   ExclusionRule(
     "ssl-config-core_2.13"
@@ -47,7 +49,9 @@ lazy val `awesome-hackathon-svc` = (project in file("awesome-hackathon-svc"))
   .enablePlugins(JavaServerAppPackaging, PekkoGrpcPlugin, JavaAgent)
   .settings(buildSettings *)
   .settings(
-    libraryDependencies ++= orgJsonCollection ++ awsSdk ++ commonDeps ++ pekkoDeps ++ postgresDeps ++ Seq(sslConfig),
+    libraryDependencies ++= orgJsonCollection ++ sttpClientDeps ++ awsSdk ++ commonDeps ++ pekkoDeps ++ postgresDeps ++ Seq(
+      sslConfig
+    ),
     excludeDependencies ++= excludeLibraryDependencies
   )
   .dependsOn(`awesome-hackathon-protobuf`)
