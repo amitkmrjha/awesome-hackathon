@@ -2,13 +2,13 @@ package com.by.aw.hackathon.aws
 
 import com.by.aw.hackathon.model.{ModelRequest, ModelResponse}
 import com.by.aw.hackathon.util.BedrockRequestBody
+import com.by.aw.hackathon.util.PromptBuilder.buildPrompt
 import org.apache.pekko.actor.typed.ActorSystem
+import org.apache.pekko.event.slf4j.Logger
 import org.json.JSONObject
 import software.amazon.awssdk.core.SdkBytes
 import software.amazon.awssdk.services.bedrockruntime.BedrockRuntimeClient
 import software.amazon.awssdk.services.bedrockruntime.model.InvokeModelRequest
-import com.by.aw.hackathon.util.PromptBuilder.buildPrompt
-import org.apache.pekko.event.slf4j.Logger
 
 import java.nio.charset.Charset
 import scala.util.matching.Regex

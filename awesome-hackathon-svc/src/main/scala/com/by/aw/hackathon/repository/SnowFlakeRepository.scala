@@ -1,11 +1,10 @@
 package com.by.aw.hackathon.repository
 
-import com.by.aw.hackathon.util.SnowFlakeJdbc
 import org.apache.pekko.actor.typed.ActorSystem
 
-import java.sql.{Connection, Statement}
+import java.sql.{Connection, ResultSet, Statement}
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.{Failure, Success, Try}
+import scala.util.{Success, Try}
 
 trait SnowFlakeRepository:
   def close: Unit
@@ -19,18 +18,13 @@ class DefaultSnowFlakeRepository(connection: Try[Connection])(using system: Acto
 
   override def executeQuery(query: String): Future[Seq[String]] =
     Future.fromTry(statement).map { statement =>
-      val resultSet   = statement.executeQuery(query)
-      val metaData    = resultSet.getMetaData
-      val columnCount = metaData.getColumnCount
-      val columnNames = (1 to columnCount).map(metaData.getColumnName)
-      val rows        = Iterator
-        .continually(resultSet)
-        .takeWhile(_.next())
-        .map { row =>
-          columnNames.map(row.getString)
-        }
-        .toSeq
-      rows.map(_.mkString(","))
+      val resultSet: ResultSet = statement.executeQuery(query)
+      println(s"resultSet: ${resultSet.getFetchSize}")
+      val results              = scala.collection.mutable.Buffer[String]()
+      while (resultSet.next()) {
+        results += resultSet.getString("ASSET_ID") // Adjust the column name as needed
+      }
+      results.toSeq
     }
 
   override def close: Unit =

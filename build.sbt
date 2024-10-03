@@ -52,7 +52,9 @@ lazy val `awesome-hackathon-svc` = (project in file("awesome-hackathon-svc"))
     libraryDependencies ++= orgJsonCollection ++ sttpClientDeps ++ awsSdk ++ commonDeps ++
       pekkoDeps ++ postgresDeps ++ Seq(
         snowFlakeJdbc,
-        sslConfig
+        sslConfig,
+        bouncyCastle,
+        bouncyCastlepkix
       ),
     excludeDependencies ++= excludeLibraryDependencies
   )

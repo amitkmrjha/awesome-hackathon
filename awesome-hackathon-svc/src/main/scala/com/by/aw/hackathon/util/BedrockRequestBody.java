@@ -3,9 +3,9 @@ package com.by.aw.hackathon.util;
 import org.json.JSONObject;
 import software.amazon.awssdk.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Arrays;
 
 public class BedrockRequestBody {
 

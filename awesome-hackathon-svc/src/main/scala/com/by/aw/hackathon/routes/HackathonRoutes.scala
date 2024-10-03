@@ -3,21 +3,21 @@ package com.by.aw.hackathon.routes
 import com.by.aw.hackathon.model.{HealthCheck, ModelRequest}
 import com.by.aw.hackathon.service.HackathonHttpService
 import org.apache.pekko.actor.typed.ActorSystem
+import org.apache.pekko.actor.typed.scaladsl.adapter.*
 import org.apache.pekko.http.cors.scaladsl.CorsDirectives.cors
+import org.apache.pekko.http.cors.scaladsl.model.HttpOriginMatcher
 import org.apache.pekko.http.cors.scaladsl.settings.CorsSettings
 import org.apache.pekko.http.scaladsl.model.StatusCodes
+import org.apache.pekko.http.scaladsl.model.headers.HttpOrigin
 import org.apache.pekko.http.scaladsl.server.Directives.*
 import org.apache.pekko.http.scaladsl.server.{ExceptionHandler, RejectionHandler, Route}
-import org.apache.pekko.actor.typed.scaladsl.adapter.*
-import org.apache.pekko.http.cors.scaladsl.model.HttpOriginMatcher
-import org.apache.pekko.http.scaladsl.model.headers.HttpOrigin
 
 import java.time.Instant
-import scala.util.{Failure, Success}
 import scala.concurrent.duration.*
+import scala.util.{Failure, Success}
 
 trait HackathonRoutes extends HackathonJsonFormat:
-  import org.apache.pekko.http.cors.scaladsl.CorsDirectives._
+  import org.apache.pekko.http.cors.scaladsl.CorsDirectives.*
   val rejectionHandler = corsRejectionHandler.withFallback(RejectionHandler.default)
   val exceptionHandler = ExceptionHandler { case e: NoSuchElementException =>
     complete(StatusCodes.NotFound -> e.getMessage)

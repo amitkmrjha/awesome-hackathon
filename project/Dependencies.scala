@@ -60,4 +60,7 @@ object Dependencies {
   val sttpSprayJson     = "com.softwaremill.sttp.client4" %% "spray-json"         % Version.sttp
   val sttpSlf4JLog      = "com.softwaremill.sttp.client4" %% "slf4j-backend"      % Version.sttp
 
+  val bouncyCastle     = "org.bouncycastle" % "bcprov-jdk15on" % Version.bouncyCastle
+  val bouncyCastlepkix = "org.bouncycastle" % "bcpkix-jdk15on" % Version.bouncyCastle
+
 }

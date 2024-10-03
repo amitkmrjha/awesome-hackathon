@@ -17,7 +17,10 @@ object BuildSettings {
         "-unchecked",
         "-feature"
       ),
-      javaOptions ++= Seq("--add-opens=java.base/java.util.concurrent=ALL-UNNAMED"),
+      javaOptions ++= Seq(
+        "--add-opens=java.base/java.util.concurrent=ALL-UNNAMED",
+        "--add-opens=java.base/java.nio=org.apache.arrow.memory.core,ALL-UNNAMED"
+      ),
       Test / parallelExecution := true,
       Test / fork              := true
     )

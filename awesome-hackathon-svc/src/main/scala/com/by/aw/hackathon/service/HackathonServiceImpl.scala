@@ -43,10 +43,9 @@ class HackathonServiceImpl[A: ActorSystem](
   override def promptInvoke(request: ModelRequest): Future[ModelResponse] =
     val result = for {
       modelResponse <- Future.fromTry(Try(bedrockModel.invoke(request)))
-      // assets        <- snowFlakeRepository.executeQuery(modelResponse.reply)
-    } yield
-    // ModelResponse(assets.mkString(","))
-    modelResponse
+      assets        <- snowFlakeRepository.executeQuery(modelResponse.reply)
+    } yield ModelResponse(assets.mkString(","))
+    // modelResponse
     result.recover { case e: Exception =>
       log.error("Error while invoking model", e)
       ModelResponse(s"Model invocation failed: ${e.getMessage}")
