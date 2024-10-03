@@ -19,7 +19,6 @@ class DefaultSnowFlakeRepository(connection: Try[Connection])(using system: Acto
   override def executeQuery(query: String): Future[Seq[String]] =
     Future.fromTry(statement).map { statement =>
       val resultSet: ResultSet = statement.executeQuery(query)
-      println(s"resultSet: ${resultSet.getFetchSize}")
       val results              = scala.collection.mutable.Buffer[String]()
       while (resultSet.next()) {
         results += resultSet.getString("ASSET_ID") // Adjust the column name as needed
