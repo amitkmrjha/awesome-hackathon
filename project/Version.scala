@@ -12,4 +12,5 @@ object Version {
   val scalikeJDBC       = "4.3.0"
   val scalikeJDBCStream = "4.3.0"
   val iamPostgresJDBC   = "0.1.8"
+  val sfJdbc            = "3.19.0"
 }

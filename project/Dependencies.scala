@@ -42,6 +42,8 @@ object Dependencies {
   val scalikeJDBCTest   =
     ("org.scalikejdbc" %% "scalikejdbc-test" % Version.scalikeJDBC % "test")
 
+  val snowFlakeJdbc = ("net.snowflake" % "snowflake-jdbc" % Version.sfJdbc)
+
   val postgres = "org.postgresql" % "postgresql" % Version.postgres
 
   val iamPostgresJDBCDriver = "io.magj" % "iam-jdbc-driver" % Version.iamPostgresJDBC

@@ -3,7 +3,9 @@ package com.by.aw.hackathon
 import com.by.aw.hackathon.aws.DefaultBedrockModel
 import com.by.aw.hackathon.client.pybynder.PyBynderRestClient
 import com.by.aw.hackathon.provider.DefaultAssetProvider
+import com.by.aw.hackathon.repository.{DefaultSnowFlakeRepository, SnowFlakeRepository}
 import com.by.aw.hackathon.service.HackathonServiceImpl
+import com.by.aw.hackathon.util.SnowFlakeJdbc
 import com.typesafe.config.ConfigFactory
 import org.apache.pekko.actor.typed.ActorSystem
 import org.apache.pekko.actor.typed.scaladsl.Behaviors
@@ -31,29 +33,31 @@ object HackathonMain:
 
   @main def main(): Unit =
     sys.addShutdownHook(system.terminate())
-    val bedrockClient = BedrockRuntimeClient
+    val bedrockClient       = BedrockRuntimeClient
       .builder()
       .region(Region.EU_CENTRAL_1)
       .credentialsProvider(ProfileCredentialsProvider.create("development"))
       .build()
-
+    val connection          = SnowFlakeJdbc.getConnection
+    val snowFlakeRepository = new DefaultSnowFlakeRepository(connection)
     try {
-      init(bedrockClient)
+      init(bedrockClient, snowFlakeRepository)
     } catch {
       case NonFatal(e) =>
         logger.error("Terminating due to initialization error", e)
+        snowFlakeRepository.close
         system.terminate()
     }
 
-  def init(bedrockClient: BedrockRuntimeClient)(using
+  def init(bedrockClient: BedrockRuntimeClient, sfRepository: SnowFlakeRepository)(using
       system: ActorSystem[?]
   ): Unit =
     PekkoManagement(system).start()
     ClusterBootstrap(system).start()
 
-    startGrpc(bedrockClient)
+    startGrpc(bedrockClient, sfRepository)
 
-  private def startGrpc(bedrockClient: BedrockRuntimeClient)(using
+  private def startGrpc(bedrockClient: BedrockRuntimeClient, sfRepository: SnowFlakeRepository)(using
       system: ActorSystem[?]
   ): Future[Http.ServerBinding] =
     given ActorSystem[?]   = system
@@ -64,7 +68,7 @@ object HackathonMain:
     val bedrockModel                        = new DefaultBedrockModel(bedrockClient)
     val pyBynderRestClient                  = PyBynderRestClient.apply
     val assetProvider                       = new DefaultAssetProvider(pyBynderRestClient)
-    val serviceImpl                         = new HackathonServiceImpl(bedrockModel, assetProvider)
+    val serviceImpl                         = new HackathonServiceImpl(bedrockModel, assetProvider, sfRepository)
     val binding: Future[Http.ServerBinding] = HackathonServer.start(grpcInterface, grpcPort, serviceImpl, serviceImpl)
     system.log.info(s"Awesome Hackathon gRPC and Http server running at $grpcInterface:$grpcPort")
     binding

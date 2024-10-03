@@ -4,6 +4,7 @@ import com.aw.hackathon.grpc.*
 import com.by.aw.hackathon.aws.BedrockModel
 import com.by.aw.hackathon.model.{ModelRequest, ModelResponse}
 import com.by.aw.hackathon.provider.AssetProvider
+import com.by.aw.hackathon.repository.SnowFlakeRepository
 import com.google.protobuf.empty.Empty
 import com.google.protobuf.timestamp.Timestamp
 import org.apache.pekko.actor.typed.ActorSystem
@@ -17,8 +18,11 @@ import java.time.Instant
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 
-class HackathonServiceImpl[A: ActorSystem](bedrockModel: BedrockModel, assetProvider: AssetProvider)
-    extends HackathonServicePowerApi
+class HackathonServiceImpl[A: ActorSystem](
+    bedrockModel: BedrockModel,
+    assetProvider: AssetProvider,
+    snowFlakeRepository: SnowFlakeRepository
+) extends HackathonServicePowerApi
     with HackathonHttpService:
 
   val system   = summon[ActorSystem[?]]
@@ -37,7 +41,16 @@ class HackathonServiceImpl[A: ActorSystem](bedrockModel: BedrockModel, assetProv
     )
 
   override def promptInvoke(request: ModelRequest): Future[ModelResponse] =
-    Future.fromTry(Try(bedrockModel.invoke(request)))
+    val result = for {
+      modelResponse <- Future.fromTry(Try(bedrockModel.invoke(request)))
+      // assets        <- snowFlakeRepository.executeQuery(modelResponse.reply)
+    } yield
+    // ModelResponse(assets.mkString(","))
+    modelResponse
+    result.recover { case e: Exception =>
+      log.error("Error while invoking model", e)
+      ModelResponse(s"Model invocation failed: ${e.getMessage}")
+    }
 
   def helloToPyBynder: Future[String] =
     Future.successful("Hello to Pybynder!")
