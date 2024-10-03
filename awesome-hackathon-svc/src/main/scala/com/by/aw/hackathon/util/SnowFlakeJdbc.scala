@@ -11,7 +11,7 @@ import scala.util.Try
 
 object SnowFlakeJdbc:
   Security.addProvider(new BouncyCastleProvider)
-  val PRIVATE_KEY_FILE = "/Users/amit.kumar/ws/bynder/hackathon/snowflake_dev_rsa_key.p8"
+  val PRIVATE_KEY_FILE = "/tmp/bynder-hackathon/snowflake_dev_rsa_key.p8"
 
   def loadPrivateKey(path: String): PrivateKey = {
     // Load the private key from PEM file
