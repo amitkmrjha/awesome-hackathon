@@ -2,14 +2,18 @@ package com.by.aw.hackathon.util
 
 object PromptBuilder:
 
-  val sourceMpo  = scala.io.Source.fromResource("mpo.txt")
-  val mpo        =
+  val sourceMpo                                  = scala.io.Source.fromResource("mpo.txt")
+  val mpo                                        =
     try sourceMpo.mkString
     finally sourceMpo.close()
-  val sourceTags = scala.io.Source.fromResource("tags.txt")
-  val tags       =
+  val sourceTags                                 = scala.io.Source.fromResource("tags.txt")
+  val tags                                       =
     try sourceTags.mkString
     finally sourceTags.close()
+  def buildCollectionNamePrompt(payload: String) =
+    s"""
+       |Generate a single title for a collection of assets based on this description: ${payload}. The title cannot exceed 255 characters. Please put the generated title in a code block.
+       |""".stripMargin
 
   def buildPrompt(payload: String, mpo: String = mpo, tags: String = tags) =
     s"""

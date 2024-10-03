@@ -18,4 +18,4 @@ trait HackathonJsonFormat extends SprayJsonSupport with DefaultJsonProtocol:
 
   given healthCheckFormat: RootJsonFormat[HealthCheck]     = jsonFormat2(HealthCheck.apply)
   given modelRequestFormat: RootJsonFormat[ModelRequest]   = jsonFormat2(ModelRequest.apply)
-  given modelResponseFormat: RootJsonFormat[ModelResponse] = jsonFormat1(ModelResponse.apply)
+  given modelResponseFormat: RootJsonFormat[ModelResponse] = jsonFormat2(ModelResponse.apply)
